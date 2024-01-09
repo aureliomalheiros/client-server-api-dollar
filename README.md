@@ -22,9 +22,9 @@ Server:
 - The server will make requests to the API
 - You will receive a JSON response
 - Will record the USD exchange rates in an SQLite database
-- Maximum timeout to call the API is 200ms
+- The maximum timeout to call the API is 200ms
 - Maximum timeout to persist data in the database is 10ms
-- Endpoint: /cotacao
-- Port: 8080
+- Endpoint: `/cotacao`
+- Port: `8080`
 
 All three contexts should log an error if the execution time is insufficient.
