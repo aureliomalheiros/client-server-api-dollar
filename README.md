@@ -1,6 +1,6 @@
 # Client Server dollar quote
 
-:dollar_backnote: This repository is a project for requesting the dollar quote.
+:money_with_wings: This repository is a project for requesting the dollar quote.
 
 ## Requirements
 
