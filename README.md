@@ -2,6 +2,8 @@
 
 :money_with_wings: This repository is a project for requesting the dollar quote.
 
+![Status](https://img.shields.io/badge/status-progress-blue)
+
 ## Requirements
 
 - Golang
