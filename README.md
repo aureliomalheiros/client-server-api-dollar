@@ -30,3 +30,16 @@ Server:
 - Port: `8080`
 
 All three contexts should log an error if the execution time is insufficient.
+
+### Running
+
+```bash
+client-server-api-dollar/
+├── cmd/
+|   └── run.sh
+├── client/
+│   └── client.go
+├── server/
+│   └── server.go
+└── main.go
+```

@@ -1,47 +1,28 @@
 package main
 
 import (
-	"fmt"
-	"net/http"
-	"encoding/json"
+	"log"
+	"os"
+	"os/signal"
+	"syscall"
+	"github.com/aureliomalheiros/client-server-api-dollar/cliente"
+	"github.com/aureliomalheiros/client-server-api-dollar/server"
 )
-type Dollar struct {
-	USDBRL struct {
-		Code       string `json:"code"`
-		Codein     string `json:"codein"`
-		Name       string `json:"name"`
-		High       string `json:"high"`
-		Low        string `json:"low"`
-		VarBid     string `json:"varBid"`
-		PctChange  string `json:"pctChange"`
-		Bid        string `json:"bid"`
-		Ask        string `json:"ask"`
-		Timestamp  string `json:"timestamp"`
-		CreateDate string `json:"create_date"`
-	} `json:"USDBRL"`
-}
-func main(){
-	fmt.Println("Initialize my server in port 8080")
-	http.HandleFunc("/cotacao", cotacao())
-	http.ListenAndServe(":8080", nil)
-}
 
-func cotacao(w http.ResponseWriter, r *http.Request){
-	res, err := http.Get("https://economia.awesomeapi.com.br/json/last/USD-BRL")
+func main() {
+	// Iniciar o servidor em uma goroutine
+	go func() {
+		if err := server.Start(); err != nil {
+			log.Fatalf("Failed to start server: %v\n", err)
+		}
+	}()
 
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
+	// Executar o cliente
+	cliente.Run()
 
-	defer res.Body.Close()
-
-	var response Dollar
-
-	if err := json.NewDecoder(res.Body).Decode(&response); err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	fmt.Fprintf(w, "Bid: %s\n", response.USDBRL.Bid)
+	// Esperar por sinais de interrupção para desligar o servidor de forma graciosa
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM)
+	<-stop
+	log.Println("Shutting down server...")
 }
