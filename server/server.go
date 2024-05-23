@@ -5,6 +5,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"fmt"
+	_"io"
 	"net/http"
 	"time"
 
@@ -52,7 +53,7 @@ func getCotacao(w http.ResponseWriter, r *http.Request, db *sql.DB) {
 	ctx, cancel := context.WithTimeout(r.Context(), 200*time.Millisecond)
 	defer cancel()
 
-	req, err := http.NewRequestWithContext(ctx, "GET", "https://economia.awesomeapi.com.br/json/last/USD-BRL")
+	req, err := http.NewRequestWithContext(ctx, "GET", "https://economia.awesomeapi.com.br/json/last/USD-BRL", nil) // Correção aqui
 	if err != nil {
 		http.Error(w, "Failed to create request to external API", http.StatusInternalServerError)
 		return

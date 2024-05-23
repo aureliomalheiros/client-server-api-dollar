@@ -22,4 +22,4 @@ docker-compose exec app go run client/client.go
 # log "Parando os containers Docker..."
 # docker-compose down
 
-log "Finishe..."
+log "Finished..."

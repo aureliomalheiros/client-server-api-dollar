@@ -1,10 +1,12 @@
-FROM golang:1.20-alpine
+FROM golang:1.21-alpine
+
+RUN apk add --no-cache git
 
 WORKDIR /app
 
 COPY . .
 
 RUN go mod tidy
-RUN go build -o myapp main.go
+RUN go build -o main main.go
 
-CMD ["./client-server-api-dollar"]
+CMD ["./main"]

@@ -1,4 +1,4 @@
-package cliente
+package client
 
 import (
 	"context"
@@ -13,7 +13,7 @@ func Run() {
 	ctx, cancel := context.WithTimeout(context.Background(), 300*time.Millisecond)
 	defer cancel()
 
-	req, err := http.NewRequestWithContext(ctx, "GET", "http://localhost:8080/cotacao")
+	req, err := http.NewRequestWithContext(ctx, "GET", "http://localhost:8080/cotacao", nil) // Correção aqui
 	if err != nil {
 		fmt.Printf("Failed to create request: %v\n", err)
 		return

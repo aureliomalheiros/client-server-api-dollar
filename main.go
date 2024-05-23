@@ -5,7 +5,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"github.com/aureliomalheiros/client-server-api-dollar/cliente"
+	"github.com/aureliomalheiros/client-server-api-dollar/client"
 	"github.com/aureliomalheiros/client-server-api-dollar/server"
 )
 
@@ -17,8 +17,7 @@ func main() {
 		}
 	}()
 
-	// Executar o cliente
-	cliente.Run()
+	client.Run()
 
 	// Esperar por sinais de interrupção para desligar o servidor de forma graciosa
 	stop := make(chan os.Signal, 1)

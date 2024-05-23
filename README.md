@@ -43,3 +43,12 @@ client-server-api-dollar/
 │   └── server.go
 └── main.go
 ```
+
+
+```bash
+chmod +x cmd/run.sh
+```
+
+```bash
+sudo ./cmd/run.sh
+```
