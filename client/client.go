@@ -2,6 +2,7 @@ package client
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
@@ -9,43 +10,56 @@ import (
 	"time"
 )
 
-func Run() {
+type ExchangeRate struct {
+	Bid float64 `json:"bid"`
+}
+
+func GetExchangeRate() (float64, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 300*time.Millisecond)
 	defer cancel()
 
-	req, err := http.NewRequestWithContext(ctx, "GET", "http://localhost:8080/cotacao", nil) // Correção aqui
+	req, err := http.NewRequestWithContext(ctx, "GET", "http://localhost:8080/cotacao", nil)
 	if err != nil {
-		fmt.Printf("Failed to create request: %v\n", err)
-		return
+		return 0, fmt.Errorf("error creating HTTP request: %v", err)
 	}
 
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
-		fmt.Printf("Failed to get response: %v\n", err)
-		return
+		return 0, fmt.Errorf("error making HTTP request: %v", err)
 	}
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		fmt.Printf("Failed to read response body: %v\n", err)
-		return
+		return 0, fmt.Errorf("error reading response body: %v", err)
 	}
 
-	fmt.Println(string(body))
+	var data map[string]float64
+	if err := json.Unmarshal(body, &data); err != nil {
+		return 0, fmt.Errorf("error decoding JSON: %v", err)
+	}
 
-	file, err := os.Create("cotacao.txt")
+	bid := data["bid"]
+
+	if err := SaveToFile("cotacao.txt", bid); err != nil {
+		return 0, fmt.Errorf("error saving exchange rate to file: %v", err)
+	}
+
+	return bid, nil
+}
+
+func SaveToFile(filename string, bid float64) error {
+	file, err := os.Create(filename)
 	if err != nil {
-		fmt.Printf("Failed to create file: %v\n", err)
-		return
+		return err
 	}
 	defer file.Close()
 
-	_, err = file.WriteString(fmt.Sprintf("Dólar: %s\n", body))
+	_, err = fmt.Fprintf(file, "Dollar: %.2f", bid)
 	if err != nil {
-		fmt.Printf("Failed to write to file: %v\n", err)
-		return
+		return err
 	}
-}
 
+	return nil
+}

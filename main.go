@@ -1,27 +1,34 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"os/signal"
 	"syscall"
-	"github.com/aureliomalheiros/client-server-api-dollar/client"
+
 	"github.com/aureliomalheiros/client-server-api-dollar/server"
 )
 
 func main() {
-	// Iniciar o servidor em uma goroutine
+	// Iniciando o servidor
 	go func() {
-		if err := server.Start(); err != nil {
-			log.Fatalf("Failed to start server: %v\n", err)
+		err := server.StartServer()
+		if err != nil {
+			log.Fatalf("Erro ao iniciar o servidor: %v", err)
 		}
 	}()
 
-	client.Run()
+	// Aguardando um sinal para encerrar
+	sig := make(chan os.Signal, 1)
+	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
+	<-sig
 
-	// Esperar por sinais de interrupção para desligar o servidor de forma graciosa
-	stop := make(chan os.Signal, 1)
-	signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM)
-	<-stop
-	log.Println("Shutting down server...")
+	// Encerrando o servidor
+	err := server.StopServer()
+	if err != nil {
+		log.Fatalf("Erro ao encerrar o servidor: %v", err)
+	}
+
+	fmt.Println("Servidor encerrado.")
 }

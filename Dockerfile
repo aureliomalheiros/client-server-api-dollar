@@ -1,12 +1,22 @@
-FROM golang:1.21-alpine
+# Dockerfile para o projeto client-server-api-dollar
 
-RUN apk add --no-cache git
+# Imagem base
+FROM golang:latest
 
-WORKDIR /app
+# Definir o diretório de trabalho
+WORKDIR /go/src/client-server-api-dollar
 
+# Copiar os arquivos go.mod e go.sum
+COPY go.mod go.sum ./
+
+# Baixar as dependências do Go
+RUN go mod download
+
+# Copiar o restante dos arquivos do projeto para o container
 COPY . .
 
-RUN go mod tidy
-RUN go build -o main main.go
+# Compilar o código
+RUN go build -o main .
 
+# Comando padrão para executar o servidor
 CMD ["./main"]
