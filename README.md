@@ -43,12 +43,3 @@ client-server-api-dollar/
 └── docker-compose.yaml
 └── Dockerfile
 ```
-
-
-```bash
-chmod +x cmd/run.sh
-```
-
-```bash
-sudo ./cmd/run.sh
-```
