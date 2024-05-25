@@ -35,13 +35,13 @@ All three contexts should log an error if the execution time is insufficient.
 
 ```bash
 client-server-api-dollar/
-├── cmd/
-|   └── run.sh
 ├── client/
 │   └── client.go
 ├── server/
 │   └── server.go
 └── main.go
+└── docker-compose.yaml
+└── Dockerfile
 ```
 
 
